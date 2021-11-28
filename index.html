@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Snake Game</title>
+        <style>
+            .score
+            {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 900px;
+                font-size: 250px;
+                position: relative;
+                z-index: 145;
+                opacity: 0.1;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="score">
+            <h1 id = "point"></h1>
+        </div>
+        
+    </body>
+
+    <script src="snake.js"></script>
+    <script>
+        var snakeTest = new snake(100, 100, '#009900');
+        
+        var gameInterval = 150;
+        var score = 0;
+
+        document.getElementById("point").innerHTML = score;
+
+        snakeTest.createFood();
+        
+        var moveTimer = setInterval(start, gameInterval);
+
+        window.addEventListener("keydown", event => {
+            var keyCode = event.which;
+            clearInterval(moveTimer);
+            if(keyCode == 38 || keyCode == 87) //up
+            {
+                snakeTest.rotate('u');
+            }
+            else if(keyCode == 39 || keyCode == 68) // right
+            {
+                snakeTest.rotate('r');
+            }
+            else if(keyCode == 37 || keyCode == 65) // left
+            {
+                snakeTest.rotate('l');
+            }
+            else if(keyCode == 83 || keyCode == 40) // down
+            {
+                snakeTest.rotate('d');
+            }
+            else if(keyCode == 32)
+            {
+                snakeTest.createFood();
+            }
+            
+            start();
+
+            moveTimer = setInterval(start, gameInterval);
+            
+        });
+
+        function start(){
+            snakeTest.move();
+            if(snakeTest.check() == 0)
+            {
+                alert("GAME OVER!\nYOUR SCORE IS: " + score);
+                snakeTest.reset();
+                location.reload();
+            }
+            else if (snakeTest.check() == 2)
+            {
+                snakeTest.addPart();
+                snakeTest.createFood();
+                score += 1;
+                document.getElementById("point").innerHTML = score;
+            }
+            
+        }
+    </script>
+</html>
